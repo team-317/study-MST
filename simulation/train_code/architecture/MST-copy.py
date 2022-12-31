@@ -100,8 +100,7 @@ class MaskGuidedMechanism(nn.Module):
         attn_map = torch.sigmoid(self.depth_conv(self.conv2(mask_shift)))
         res = mask_shift * attn_map
         mask_shift = res + mask_shift
-        mask_emb = mask_shift
-        # mask_emb = shift_back(mask_shift)
+        mask_emb = shift_back(mask_shift)
         return mask_emb
 
 class MS_MSA(nn.Module):
@@ -217,8 +216,8 @@ class MST(nn.Module):
         self.stage = stage
 
         # Input projection
-        # self.embedding = nn.Conv2d(28, self.dim, 3, 1, 1, bias=False)
-        self.embedding = nn.Conv2d(dim, self.dim, 3, 1, 1, bias=False)
+        self.embedding = nn.Conv2d(28, self.dim, 3, 1, 1, bias=False)
+
         # Encoder
         self.encoder_layers = nn.ModuleList([])
         dim_stage = dim
@@ -248,8 +247,7 @@ class MST(nn.Module):
             dim_stage //= 2
 
         # Output projection
-        # self.mapping = nn.Conv2d(self.dim, 28, 3, 1, 1, bias=False)
-        self.mapping = nn.Conv2d(self.dim, self.dim, 3, 1, 1, bias=False)
+        self.mapping = nn.Conv2d(self.dim, 28, 3, 1, 1, bias=False)
 
         #### activation function
         self.lrelu = nn.LeakyReLU(negative_slope=0.1, inplace=True)
